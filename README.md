@@ -1,3 +1,3 @@
 # Sample NFT Token
 
-https://sepolia.etherscan.io/address/0x8FD05AA94D5A2B2AA8D59f5809Eb2c5258f9C7e6
+[верифицированный контракт](https://sepolia.etherscan.io/address/0x2064897cfaa8f084D174A1796a57699826eF154E)
