@@ -10,7 +10,7 @@ contract NFT is ERC721, Ownable{
 
     uint256 private tokensIdCounter = 0; 
 
-    string private constant BASE_URI = "ipfs://bafkreiehkbbvbl2bb7rgu7zevqdrtx6rkb4pxhalxtwxkiphiatvpggxmi";
+    string public constant BASE_URI = "ipfs://bafkreiehkbbvbl2bb7rgu7zevqdrtx6rkb4pxhalxtwxkiphiatvpggxmi";
 
     constructor()ERC721("ShitNFT", "SHIT")Ownable(_msgSender()) { 
     }
@@ -43,4 +43,8 @@ contract NFT is ERC721, Ownable{
     function _baseURI() internal pure override returns (string memory) {
         return BASE_URI;
     }
+
+    // function tokenURI() internal pure override returns (string memory) {
+    //     return BASE_URI;
+    // }
 }
