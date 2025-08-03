@@ -6,16 +6,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract NFT is ERC721, Ownable{
 
-    uint256 BASIC_COST = 0.0001 ether;
+    uint256 public BASIC_COST = 0.0001 ether;
 
-    uint256 tokensIdCounter = 0; 
+    uint256 private tokensIdCounter = 0; 
+
+    string private constant BASE_URI = "ipfs://bafkreiehkbbvbl2bb7rgu7zevqdrtx6rkb4pxhalxtwxkiphiatvpggxmi";
 
     constructor()ERC721("ShitNFT", "SHIT")Ownable(_msgSender()) { 
-
     }
-
-    // Indicates that `tokenId` already exists with owner `owner`
-    error TokenIdAlreadyExists(uint tokensIdCounter, address owner); 
 
     // Indicates that user don't have enough money to mint NFT
     error NotEnoughMoney(uint256 sendedAmount, uint256 nftCost); 
@@ -23,15 +21,11 @@ contract NFT is ERC721, Ownable{
     error TransferError(address to, uint256 amount);
 
     function mint() external payable{
-        if(ownerOf(tokensIdCounter) != address(0)){
-            revert TokenIdAlreadyExists(tokensIdCounter, ownerOf(tokensIdCounter));
-        }
-
         if(msg.value != BASIC_COST) {
             revert NotEnoughMoney(msg.value, BASIC_COST);
         }
 
-        _safeMint(_msgSender(), tokensIdCounter);
+        _mint(_msgSender(), tokensIdCounter);
         tokensIdCounter++;
     }
 
@@ -44,5 +38,9 @@ contract NFT is ERC721, Ownable{
         
         (bool success, ) = owner().call{value:totalEther}("");
         require(success, TransferError(owner(), totalEther));
+    }
+
+    function _baseURI() internal pure override returns (string memory) {
+        return BASE_URI;
     }
 }
