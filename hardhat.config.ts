@@ -3,11 +3,12 @@ import "@nomicfoundation/hardhat-toolbox";
 import 'solidity-coverage';
 import "hardhat-gas-reporter";
 import "dotenv/config";
+import "@openzeppelin/hardhat-upgrades";
 
 const config: HardhatUserConfig = {
   solidity: "0.8.28",
   gasReporter: {
-    enabled: true,
+    enabled: false,
     currency: "USD",
     coinmarketcap: process.env.COINMARKETCAP_API_KEY, 
     token: "ETH",

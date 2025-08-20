@@ -9,7 +9,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import {IERC721Errors} from "@openzeppelin/contracts/interfaces/draft-IERC6093.sol";
 
-contract NFT is
+contract NFTv1 is
     ERC721Upgradeable,
     ERC721BurnableUpgradeable,
     OwnableUpgradeable,
@@ -21,11 +21,11 @@ contract NFT is
     error NotEnoughMoney(uint256 sentAmount, uint256 nftCost);
     error TransferError(address to, uint256 amount);
 
-    uint256 private basicCost;
+    uint256 public basicCost;
     uint256 private tokenIdCounter;
     string private constant BASE_URI =
         "ipfs://bafkreiehkbbvbl2bb7rgu7zevqdrtx6rkb4pxhalxtwxkiphiatvpggxmi";
-    mapping(uint256 => uint256) price;
+    mapping(uint256 => uint256) public price;
 
     modifier onlyMinter(uint256 tokenId) {
         require(
