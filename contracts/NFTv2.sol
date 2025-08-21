@@ -22,17 +22,17 @@ contract NFTv2 is NFTv1, ERC721EnumerableUpgradeable {
 
     function mint() public payable virtual override {
         super.mint();
-        _assignedMeta[totalSupply()] = computeRandomNumber();
+        _assignedMeta[tokenIdCounter - 1] = _computeVariant();
     }
 
-    function computeRandomNumber() internal virtual returns (uint256) {
-        uint256 totalSupply = totalSupply();
+    function _computeVariant() internal virtual returns (uint256) {
+        uint256 totalNFT = 3;
         uint256 random = uint256(
             keccak256(
                 abi.encodePacked(block.timestamp, msg.sender, block.prevrandao)
             )
         );
-        return (random % totalSupply) + 1;
+        return (random % totalNFT) + 1;
     }
 
     function tokenURI(
@@ -47,6 +47,11 @@ contract NFTv2 is NFTv1, ERC721EnumerableUpgradeable {
         _requireOwned(tokenId);
 
         uint256 randomId = _assignedMeta[tokenId];
+        if (randomId == 0) {
+            // токены, заминченные в v1 → старый URI
+            return super.tokenURI(tokenId);
+        }
+
         string memory baseURI = _baseURI();
         return
             bytes(baseURI).length > 0
