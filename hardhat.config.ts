@@ -4,6 +4,7 @@ import 'solidity-coverage';
 import "hardhat-gas-reporter";
 import "dotenv/config";
 import "@openzeppelin/hardhat-upgrades";
+import "fs";
 
 const config: HardhatUserConfig = {
   solidity: "0.8.28",
