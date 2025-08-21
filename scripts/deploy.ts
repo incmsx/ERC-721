@@ -1,5 +1,9 @@
 import {ethers, upgrades} from "hardhat"
 import fs from "fs"
+import writeInfo from "./writeDeploymentInfo"
+
+const out = "scripts/deployment/deploymentInfo.json";
+
 const main = async () => {
     const params = JSON.parse(fs.readFileSync("ignition/parameters.json", "utf-8"));
 
@@ -19,6 +23,8 @@ const main = async () => {
 
     const implAddress = await upgrades.erc1967.getImplementationAddress(proxyAddress);
     console.log("Implementation at:", implAddress);
+
+    writeInfo(proxyAddress, implAddress, out);
 }
 
 main();

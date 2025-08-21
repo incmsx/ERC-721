@@ -1,6 +1,6 @@
 import { ethers, upgrades } from "hardhat";
 
-import { ContractFactory, parseEther, parseUnits } from "ethers";
+import { parseEther } from "ethers";
 import { expect } from "chai";
 import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
@@ -8,7 +8,7 @@ describe("NFT", function(){
     async function deploy() {
         const [owner, user] = await ethers.getSigners();
         const NFT = await ethers.getContractFactory("NFTv1");
-        const contract = await upgrades.deployProxy(NFT, ["RandomNFT", "RNFT", parseEther("0.001")], {
+        const contract = await upgrades.deployProxy(NFT, ["RandomNFT", "RNFT", parseEther("0.0001")], {
             initializer: "initialize",
             kind: "uups"
         }); 

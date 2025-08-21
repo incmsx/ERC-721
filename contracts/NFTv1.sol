@@ -22,9 +22,9 @@ contract NFTv1 is
     error TransferError(address to, uint256 amount);
 
     uint256 public basicCost;
-    uint256 private tokenIdCounter;
+    uint256 internal tokenIdCounter;
     string private constant BASE_URI =
-        "ipfs://bafkreiehkbbvbl2bb7rgu7zevqdrtx6rkb4pxhalxtwxkiphiatvpggxmi";
+        "ipfs://bafkreiehkbbvbl2bb7rgu7zevqdrtx6rkb4pxhalxtwxkiphiatvpggxmi/";
     mapping(uint256 => uint256) public price;
 
     modifier onlyMinter(uint256 tokenId) {
@@ -50,7 +50,7 @@ contract NFTv1 is
         tokenIdCounter = 1;
     }
 
-    function mint() external payable {
+    function mint() public payable virtual {
         if (msg.value < basicCost) {
             revert NotEnoughMoney(msg.value, basicCost);
         }
@@ -78,14 +78,14 @@ contract NFTv1 is
 
     function tokenURI(
         uint256 tokenId
-    ) public view override returns (string memory) {
+    ) public view virtual override returns (string memory) {
         _requireOwned(tokenId);
 
         string memory baseURI = _baseURI();
         return bytes(baseURI).length > 0 ? baseURI : "";
     }
 
-    function _baseURI() internal pure override returns (string memory) {
+    function _baseURI() internal pure virtual override returns (string memory) {
         return BASE_URI;
     }
 
