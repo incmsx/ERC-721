@@ -1,7 +1,7 @@
 import path from "path"
 import fs from "fs"
 
-const writeInfo = async (proxyAddress: any, implAddress: any, out: any) => {
+const writeInfo = async (proxyAddress: string, implAddress: string, out: string) => {
     
     const deploymentInfo = {
         ProxyAddress: proxyAddress.toString(),

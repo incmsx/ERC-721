@@ -4,28 +4,28 @@ pragma solidity ^0.8.4;
 import "./NFTv1.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721EnumerableUpgradeable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
 
-contract NFTv2 is
-    NFTv1,
-    ERC721EnumerableUpgradeable,
-    ERC721URIStorageUpgradeable
-{
+contract NFTv2 is NFTv1, ERC721EnumerableUpgradeable {
     string private constant BASE_URI =
-        "ipfs://bafybeide5b6mgnhkghlsz6eecvgdbu6nmbxmch6b46pq4pvfqpfp6j26si/";
+        "ipfs://bafybeide5b6mgnhkghlsz6eecvgdbu6nmbxmch6b46pq4pvfqpfp6j26si";
     // id => random number for URI computation
-    mapping(uint256 => uint256) private _assignedMeta;
+    mapping(uint256 => uint256) public _assignedMeta;
 
-    function initialize() public reinitializer(3) {
+    // /// @custom:oz-upgrades-unsafe-allow constructor
+    // constructor() {
+    //     _disableInitializers();
+    // }
+
+    function initializeV2() public reinitializer(2) {
         __ERC721Enumerable_init();
     }
 
-    function mint() public virtual override payable{
+    function mint() public payable virtual override {
         super.mint();
         _assignedMeta[totalSupply()] = computeRandomNumber();
     }
 
-    function computeRandomNumber() internal virtual returns(uint256) {
+    function computeRandomNumber() internal virtual returns (uint256) {
         uint256 totalSupply = totalSupply();
         uint256 random = uint256(
             keccak256(
@@ -41,16 +41,21 @@ contract NFTv2 is
         public
         view
         virtual
-        override(ERC721URIStorageUpgradeable, ERC721Upgradeable, NFTv1)
+        override(ERC721Upgradeable, NFTv1)
         returns (string memory)
     {
         _requireOwned(tokenId);
 
-        uint256 randomId = _assignedMeta[tokenId];   
+        uint256 randomId = _assignedMeta[tokenId];
         string memory baseURI = _baseURI();
         return
             bytes(baseURI).length > 0
-                ? string.concat(baseURI, "/" , Strings.toString(randomId), ".json")
+                ? string.concat(
+                    baseURI,
+                    "/",
+                    Strings.toString(randomId),
+                    ".json"
+                )
                 : "";
     }
 
@@ -60,11 +65,7 @@ contract NFTv2 is
         public
         view
         virtual
-        override(
-            ERC721EnumerableUpgradeable,
-            ERC721Upgradeable,
-            ERC721URIStorageUpgradeable
-        )
+        override(ERC721EnumerableUpgradeable, ERC721Upgradeable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
